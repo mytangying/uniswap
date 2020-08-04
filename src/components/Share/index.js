@@ -14,7 +14,7 @@ const ShareButtonWrapper = styled(Button)`
 	padding:18px;
 `
 const ModalWrapper = styled.div`
-  padding:16px;
+  padding:16px 16px 32px;
   font-size:14px;
   h3{
   	font-size:16px;
@@ -41,7 +41,7 @@ export default function Share({outputCurrency,outputID}) {
 		setShowSwapModal(true);
 	}
 	function goWechat(){
-		window.location.href="wexin://"
+		window.location.href="weixin://"
 		setShowSwapModal(false);
 	}
 

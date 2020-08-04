@@ -21,9 +21,7 @@ import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
-import useCopyClipboard from '../hooks/useCopyClipboard'
-import { useDarkModeManager } from '../state/user/hooks'
-import { CardWrapper } from '../theme'
+import {OpenApp,CopyWechat} from '../components/OpenApp'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -42,7 +40,7 @@ const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-top: 160px;
+  padding-top: 80px;
   align-items: center;
   flex: 1;
   overflow-y: auto;
@@ -61,15 +59,13 @@ const Marginer = styled.div`
 `
 
 export default function App() {
-  const [isCopied, setCopied] = useCopyClipboard(1500)
-  const [isDark] = useDarkModeManager()
-
   return (
     <Suspense fallback={null}>
       <HashRouter>
         <Route component={GoogleAnalyticsReporter} />
         <Route component={DarkModeQueryParamReader} />
         <AppWrapper>
+          <OpenApp/>
           <HeaderWrapper>
             <Header />
           </HeaderWrapper>
@@ -93,10 +89,7 @@ export default function App() {
                 <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} />
                 <Route component={RedirectPathToSwapOnly} />
               </Switch>
-              <CardWrapper onClick={() => setCopied('mathwallet007')}>
-                <img src={isDark?require('../assets/images/wechat_mode.png'):require('../assets/images/wechat.png')} width="20" alt="wechat"/>
-                <span>{isCopied ? '已复制，去添加微信':'添加微信号 mathwallet007（复制）'}</span>
-              </CardWrapper>
+              <CopyWechat/>
             </Web3ReactManager>
             <Marginer />
           </BodyWrapper>

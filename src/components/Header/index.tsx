@@ -27,13 +27,11 @@ const HeaderFrame = styled.div`
   justify-content: space-between;
   flex-direction: column;
   width: 100%;
-  top: 0;
-  position: absolute;
+  position: relative;
   z-index: 2;
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     padding: 12px 0 0 0;
     width: calc(100%);
-    position: relative;
   `};
 `
 
@@ -104,7 +102,7 @@ const UniIcon = styled.div`
   }
   ${({ theme }) => theme.mediaWidth.upToSmall`
     img {
-      width: 4.5rem;
+      width: 3rem;
     }
   `};
 `
