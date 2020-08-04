@@ -3,6 +3,22 @@ import styled from 'styled-components'
 import {MaxWidthWrapper,Button} from '../../theme'
 import Modal from '../Modal'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
+const url ='https://medishares-cn.oss-cn-hangzhou.aliyuncs.com/Uniswap/shareText/index.json'
+async function getTextJSON(url){
+    let response;
+    try {
+      response = await fetch(url)
+    } catch (error) {
+      console.log(error)
+    }
+    const json = await response.json()
+    return json
+}
+
+let textJSON = '';
+getTextJSON(url).then(res=>{
+  textJSON=res.text;
+})
 
 const ShareWrapper = styled(MaxWidthWrapper)`
 	margin-bottom:1rem;
@@ -31,7 +47,7 @@ const ModalWrapper = styled.div`
 export default function Share({outputCurrency,outputID}) {
 	const [,setCopied] = useCopyClipboard(1500)
 	const [showSwapModal, setShowSwapModal] = useState(false)
-	const copyText = `点击参与 Uniswap 项目 ${outputCurrency}: https://uniswap.mathwallet.xyz/#/swap?outputCurrency=${outputID}`
+	const copyText = `${textJSON} ${outputCurrency}: https://uniswap.mathwallet.xyz/#/swap?outputCurrency=${outputID}`
 
 	function Copy(){
 		if(!outputCurrency){
