@@ -23,7 +23,7 @@ import { TokenWarningCards } from '../../components/TokenWarningCard'
 import { BETTER_TRADE_LINK_THRESHOLD, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion, isTradeBetter } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
-// import { useCurrency } from '../../hooks/Tokens'
+import { useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
@@ -56,9 +56,11 @@ import Share from '../../components/Share'
 import Toggle from '../../components/Toggle'
 import { useChartModeManager } from '../../state/user/hooks'
 import PairPage from '../../components/PairPage'
-import TokenDataContextProvider, { Updater as TokenDataContextUpdater } from '../../contexts/TokenData'
+import TokenDataContextProvider from '../../contexts/TokenData'
 import GlobalDataContextProvider from '../../contexts/GlobalData'
-import PairDataContextProvider, { Updater as PairDataContextUpdater } from '../../contexts/PairData'
+import PairDataContextProvider from '../../contexts/PairData'
+
+import {usePair} from '../../data/Reserves'
 
 // 更新k线图表信息
 function ContextProviders({ children }) {
@@ -71,21 +73,10 @@ function ContextProviders({ children }) {
   )
 }
 
-function SwapUpdaters() {
-  return (
-    <>
-      <PairDataContextUpdater />
-      <TokenDataContextUpdater />
-    </>
-  )
-}
-
 // 获取代币地址
 function currencyKey(currency: Currency): string {
-  return currency instanceof Token ? currency.address : currency === ETHER ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':'';
+  return currency instanceof Token ? currency.address.toLowerCase() : currency === ETHER ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':'';
 }
-
-
 
 export default function Swap(props) {
   const [chartMode, toggleChartMode] = useChartModeManager()
@@ -282,18 +273,17 @@ export default function Swap(props) {
   }
 
   // 设置默认输出代币
-  // const {
-  //   location: {
-  //     search: outputCurrency
-  //   },
-  // } = props;
+  const {
+    location: {
+      search: outputCurrency
+    },
+  } = props;
 
-  // const MATHCurreny = useCurrency('0x08d967bb0134F2d07f7cfb6E246680c53927DD30');
+  const MATHCurreny = useCurrency('0x08d967bb0134F2d07f7cfb6E246680c53927DD30');
 
-  // if((!outputCurrency || !outputCurrency.replace('?outputCurrency=','')) && !currencies[Field.OUTPUT]){
-  //   console.log(outputCurrency)
-  //   onCurrencySelection(Field.OUTPUT, MATHCurreny);
-  // }
+  if((!outputCurrency || !outputCurrency.replace('?outputCurrency=','')) && !currencies[Field.OUTPUT]){
+    onCurrencySelection(Field.OUTPUT, MATHCurreny);
+  }
 
 
   // text to show while loading
@@ -305,6 +295,8 @@ export default function Swap(props) {
   const [dismissedToken1] = useTokenWarningDismissal(chainId, currencies[Field.OUTPUT])
   const showWarning =
     (!dismissedToken0 && !!currencies[Field.INPUT]) || (!dismissedToken1 && !!currencies[Field.OUTPUT])
+
+  const pairAddress = usePair(currencies[Field.INPUT] ,currencies[Field.OUTPUT])[1]?.liquidityToken?.address.toLowerCase();
 
   return (
     <>
@@ -492,7 +484,7 @@ export default function Swap(props) {
 
       <AdvancedSwapDetailsDropdown trade={trade} />
 
-      <Share outputID={currencyKey(currencies[Field.OUTPUT]).toLowerCase()} outputCurrency={currencies[Field.OUTPUT]?.symbol}/>
+      <Share outputID={currencyKey(currencies[Field.OUTPUT])} outputCurrency={currencies[Field.OUTPUT]?.symbol}/>
 
       <MaxWidthWrapper>
         <RowBetween>
@@ -506,9 +498,8 @@ export default function Swap(props) {
        chartMode?
        (!currencyKey(currencies[Field.INPUT])||!currencyKey(currencies[Field.OUTPUT])?<NullWrapper>选择代币</NullWrapper>:
       (<ContextProviders>
-        <SwapUpdaters />
         <>
-          <PairPage INPUTAddress={currencyKey(currencies[Field.INPUT]).toLowerCase()} OUTPUTAddress={currencyKey(currencies[Field.OUTPUT]).toLowerCase()}/>
+          <PairPage pairAddress={pairAddress} OUTPUTAddress={currencyKey(currencies[Field.OUTPUT])}/>
         </>
       </ContextProviders>))
       : <></>

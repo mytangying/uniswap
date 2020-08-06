@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import {MaxWidthWrapper,Button} from '../../theme'
+import { ButtonPrimary } from '../Button'
+import {Button} from '../../theme'
 import Modal from '../Modal'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
 const url ='https://medishares-cn.oss-cn-hangzhou.aliyuncs.com/Uniswap/shareText/index.json'
@@ -20,15 +21,11 @@ getTextJSON(url).then(res=>{
   textJSON=res.text;
 })
 
-const ShareWrapper = styled(MaxWidthWrapper)`
-	margin-bottom:1rem;
+const ShareButton = styled(ButtonPrimary)`
+	max-width:420px;
+	margin:2rem 0 1rem;
 `
-const ShareButtonWrapper = styled(Button)`
-  font-size:16px;
-  font-weight:500;
-	border-radius:20px;
-	padding:18px;
-`
+
 const ModalWrapper = styled.div`
   padding:16px 16px 32px;
   font-size:14px;
@@ -62,8 +59,8 @@ export default function Share({outputCurrency,outputID}) {
 	}
 
 	return (
-		<ShareWrapper>
-			<ShareButtonWrapper onClick={()=>Copy()}>分享项目</ShareButtonWrapper>
+		<>
+			<ShareButton onClick={()=>Copy()}>分享项目</ShareButton>
 			<Modal isOpen={showSwapModal} onDismiss={() => setShowSwapModal(false)}>
 				<ModalWrapper>
 					<h3>邀请文案已复制</h3>
@@ -71,6 +68,6 @@ export default function Share({outputCurrency,outputID}) {
 					<Button onClick={()=>goWechat()}>打开微信，去分享</Button>
 				</ModalWrapper>
 			</Modal>
-		</ShareWrapper>
+		</>
 	)
 }
