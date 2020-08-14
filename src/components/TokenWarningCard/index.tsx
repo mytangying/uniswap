@@ -97,7 +97,7 @@ export function TokenWarningCards({ currencies }: { currencies: { [field in Fiel
       <AutoColumn gap="lg">
         <AutoRow gap="6px">
           <StyledWarningIcon />
-          <TYPE.main color={'red2'}>Token imported</TYPE.main>
+          <TYPE.main color={'red2'}>导入代币</TYPE.main>
         </AutoRow>
         <TYPE.body color={'red2'}>
           任何人都可以在以太坊上创建和命名任何ERC20代币，包括创建现有代币的虚假版本以及声称为没有发行代币的项目代表。
