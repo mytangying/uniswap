@@ -6,7 +6,7 @@ import EthereumLogo from '../../assets/images/ethereum-logo.png'
 // import { WrappedTokenInfo } from '../../state/lists/hooks'
 // import uriToHttp from '../../utils/uriToHttp'
 
-const getTokenLogoURL = address => `/ethereum/assets/${address}/logo.png`
+const getTokenLogoURL = address => `https://medishares-cn.oss-cn-hangzhou.aliyuncs.com/Uniswap/tokenLogo/${address}/logo.png`
 const BAD_URIS: { [tokenAddress: string]: true } = {}
 
 const Image = styled.img<{ size: string }>`

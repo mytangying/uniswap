@@ -2,14 +2,17 @@ import React, { useState, useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { Area, XAxis, YAxis, ResponsiveContainer, Tooltip, AreaChart, BarChart, Bar } from 'recharts'
 import { RowBetween } from '../Row'
-
 import { toK, toNiceDate, toNiceDateYear, formattedNum } from '../../helpers'
 import { darken } from 'polished'
 import { usePairChartData } from '../../contexts/PairData'
 import { useTokenChartData } from '../../contexts/TokenData'
-import { timeframeOptions } from '../../constants/timeframe'
 import dayjs from 'dayjs'
 import DropdownSelect from '../DropdownSelect'
+
+const timeframeOptions = {
+  WEEK: '一周',
+  ALL_TIME: '所有'
+}
 
 const EmptyCard = styled.div`
   display: flex;

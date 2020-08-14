@@ -299,6 +299,7 @@ const getPairData = async (address, ethPrice) => {
     .subtract(1, 'week')
     .startOf('minute')
     .unix()
+
   let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack)
   let twoDayBlock = await getBlockFromTimestamp(utcTwoDaysBack)
   let oneWeekBlock = await getBlockFromTimestamp(utcOneWeekBack)
@@ -306,25 +307,25 @@ const getPairData = async (address, ethPrice) => {
   try {
     let result = await client.query({
       query: PAIR_DATA(address),
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'no-cache'
     })
     data = result.data && result.data.pairs && result.data.pairs[0]
 
     let oneDayResult = await client.query({
       query: PAIR_DATA(address, oneDayBlock),
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'no-cache'
     })
     oneDayData = oneDayResult.data.pairs[0]
 
     let twoDayResult = await client.query({
       query: PAIR_DATA(address, twoDayBlock),
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'no-cache'
     })
     twoDayData = twoDayResult.data.pairs[0]
 
     let oneWeekResult = await client.query({
       query: PAIR_DATA(address, oneWeekBlock),
-      fetchPolicy: 'cache-first'
+      fetchPolicy: 'no-cache'
     })
     let oneWeekData = oneWeekResult.data.pairs[0]
 

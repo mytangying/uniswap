@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
-import { FACTORY_ADDRESS, BUNDLE_ID } from '../constants/timeframe'
+const BUNDLE_ID = '1'
+const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 
 export const V1_DATA_QUERY = gql`
   query uniswap($date: Int!, $date2: Int!) {
