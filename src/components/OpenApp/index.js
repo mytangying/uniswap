@@ -37,6 +37,22 @@ const HeadBtn = styled.button`
   	outline:none;
   }
 `
+const url ='https://medishares-cn.oss-cn-hangzhou.aliyuncs.com/Uniswap/shareText/index.json'
+async function getWechatInfo(url){
+    let response;
+    try {
+      response = await fetch(url)
+    } catch (error) {
+      console.log(error)
+    }
+    const json = await response.json()
+    return json
+}
+
+let wechatInfo = '';
+getWechatInfo(url).then(res=>{
+  wechatInfo=res.wechatInfo;
+})
 // 判断终端
 const browser = {
   versions: function() {
@@ -80,9 +96,9 @@ export function CopyWechat(){
   const [isDark] = useDarkModeManager();
 
 	return (
-		<CardWrapper onClick={() => setCopied('mathwallet007')}>
+		<CardWrapper onClick={() => setCopied(wechatInfo)}>
       <img src={isDark?require('../../assets/images/wechat_mode.png'):require('../../assets/images/wechat.png')} width="20" alt="wechat"/>
-      <span>{isCopied ? '已复制，去添加微信':'添加微信号 mathwallet007（复制）'}</span>
+      <span>{isCopied ? '已复制，去添加微信':'添加微信号 '+wechatInfo+'（复制）'}</span>
     </CardWrapper>
 	)
 }
