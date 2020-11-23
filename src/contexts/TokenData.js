@@ -390,21 +390,31 @@ const getTokenPairs = async tokenAddress => {
   }
 }
 
-const getTokenChartData = async tokenAddress => {
+const getTokenChartData = async (tokenAddress) => {
   let data = []
   const utcEndTime = dayjs.utc()
   let utcStartTime = utcEndTime.subtract(1, 'year')
   let startTime = utcStartTime.startOf('minute').unix() - 1
 
   try {
-    let result = await client.query({
-      query: TOKEN_CHART,
-      variables: {
-        tokenAddr: tokenAddress
-      },
-      fetchPolicy: 'cache-first'
-    })
-    data = data.concat(result.data.tokenDayDatas)
+    let allFound = false
+    let skip = 0
+    while (!allFound) {
+      let result = await client.query({
+        query: TOKEN_CHART,
+        variables: {
+          tokenAddr: tokenAddress,
+          skip,
+        },
+        fetchPolicy: 'cache-first',
+      })
+      if (result.data.tokenDayDatas.length < 1000) {
+        allFound = true
+      }
+      skip += 1000
+      data = data.concat(result.data.tokenDayDatas)
+    }
+
     let dayIndexSet = new Set()
     let dayIndexArray = []
     const oneDay = 24 * 60 * 60
@@ -413,18 +423,8 @@ const getTokenChartData = async tokenAddress => {
       dayIndexSet.add((data[i].date / oneDay).toFixed(0))
       dayIndexArray.push(data[i])
       dayData.dailyVolumeUSD = parseFloat(dayData.dailyVolumeUSD)
-
-      // hot fixes until version without unibomb
-      if (dayData.date === 1592352000 && tokenAddress === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
-        dayData.dailyVolumeUSD = parseFloat(dayData.dailyVolumeUSD) - 92675072
-      }
-      if (dayData.date === 1592438400 && tokenAddress === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
-        dayData.dailyVolumeUSD = parseFloat(dayData.dailyVolumeUSD) - 46360757
-      }
-      if (dayData.date === 1592524800 && tokenAddress === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
-        dayData.dailyVolumeUSD = parseFloat(dayData.dailyVolumeUSD) - 45616105
-      }
     })
+
     // fill in empty days
     let timestamp = data[0] && data[0].date ? data[0].date : startTime
     let latestLiquidityUSD = data[0] && data[0].totalLiquidityUSD
@@ -441,7 +441,7 @@ const getTokenChartData = async tokenAddress => {
           dailyVolumeUSD: 0,
           priceUSD: latestPriceUSD,
           totalLiquidityUSD: latestLiquidityUSD,
-          mostLiquidPairs: latestPairDatas
+          mostLiquidPairs: latestPairDatas,
         })
       } else {
         latestLiquidityUSD = dayIndexArray[index].totalLiquidityUSD
