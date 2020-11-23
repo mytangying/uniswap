@@ -6,7 +6,7 @@ import { WETH } from '@uniswap/sdk'
 
 import EthereumLogo from '../../assets/images/ethereum-logo.png'
 
-const getTokenLogoURL = address => `https://medishares-cn.oss-cn-hangzhou.aliyuncs.com/Uniswap/tokenLogo/${address}/logo.png`
+const getTokenLogoURL = address => `https://medishares-cn.oss-cn-hangzhou.aliyuncs.com/assets/blockchains/ethereum/assets/${address}/logo.png`
 const NO_LOGO_ADDRESSES: { [tokenAddress: string]: true } = {}
 
 const Image = styled.img<{ size: string }>`
