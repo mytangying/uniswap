@@ -23,7 +23,7 @@ import { TokenWarningCards } from '../../components/TokenWarningCard'
 import { BETTER_TRADE_LINK_THRESHOLD, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion, isTradeBetter } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
-import { useCurrency } from '../../hooks/Tokens'
+// import { useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
@@ -273,17 +273,17 @@ export default function Swap(props) {
   }
 
   // 设置默认输出代币
-  const {
-    location: {
-      search: outputCurrency
-    },
-  } = props;
+  // const {
+  //   location: {
+  //     search: outputCurrency
+  //   },
+  // } = props;
 
-  const MATHCurreny = useCurrency('0x08d967bb0134F2d07f7cfb6E246680c53927DD30');
+  // const MATHCurreny = useCurrency('0x08d967bb0134F2d07f7cfb6E246680c53927DD30');
 
-  if((!outputCurrency || !outputCurrency.replace('?outputCurrency=','')) && !currencies[Field.OUTPUT]){
-    onCurrencySelection(Field.OUTPUT, MATHCurreny);
-  }
+  // if((!outputCurrency || !outputCurrency.replace('?outputCurrency=','')) && !currencies[Field.OUTPUT]){
+  //   onCurrencySelection(Field.OUTPUT, MATHCurreny);
+  // }
 
 
   // text to show while loading
